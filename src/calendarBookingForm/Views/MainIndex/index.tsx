@@ -33,6 +33,7 @@ import { ConfirmPage } from "../Confirmation/ConfirmPage";
 import { OrderDetailsPage } from "../OrderDetails/OrderDetailsPage";
 import "./CalendarWidgetMain.scss";
 import { FormField } from "../../../typings/CustomForm";
+import { OrderDetailsFormType } from "../../../types";
 
 enum CUSTOM_FIELDS_TO_SKIP {
   firstName = "First Name",
@@ -465,7 +466,7 @@ export class CalendarWidgetMain extends Component<
     customFormFieldValues?: FormFieldValueInput[],
     index?: number,
   ) => {
-    const { event, selectedTimeslot } = this.state;
+    const { event, selectedTimeslot, quantitiesMap } = this.state;
     const firstName: Partial<FormField> = customFormFieldValues ?
       customFormFieldValues.find(({ label }) => label === CUSTOM_FIELDS_TO_SKIP.firstName) : {};
     const lastName: Partial<FormField> = customFormFieldValues ?
@@ -481,6 +482,13 @@ export class CalendarWidgetMain extends Component<
 
     const eventId = event._id.toString();
 
+    const quantity = quantitiesMap &&
+      event.customOrderDetails &&
+      event.customOrderDetails.fields && 
+      event.customOrderDetails.fields.length && 
+      event.customOrderDetails.formType === OrderDetailsFormType.PerOrder ? 
+      Object.values(quantitiesMap)[0] : 1;
+
     const newLineItem = {
       eventId,
       eventVariantName: variant.name,
@@ -490,7 +498,7 @@ export class CalendarWidgetMain extends Component<
       startsAt: selectedTimeslot.startsAt,
       endsAt: selectedTimeslot.endsAt,
       timezone: selectedTimeslot.timezone,
-      quantity: 1,
+      quantity,
       customOrderDetailsValues: filteredCustomFormFieldValues,
       attendee: {
         // @ts-ignore
