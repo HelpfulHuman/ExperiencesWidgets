@@ -807,7 +807,8 @@ declare module 'date-fns' {
     function startOfWeek(
         date: Date | string | number,
         options?: {
-            weekStartsOn?: number
+            weekStartsOn?: number;
+            locale: string;
         }
     ): Date
     namespace startOfWeek { }

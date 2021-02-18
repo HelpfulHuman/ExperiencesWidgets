@@ -61,8 +61,8 @@ export class Calendar extends Component<CalendarProps> {
 
     /** returns all the days in the month with the correct offset for that month */
     get monthTemplate() {
-        const { month, year } = this.props;
-        return getMonthTemplate(month, year || 0);
+        const { month, year, locale } = this.props;
+        return getMonthTemplate(month, year || 0, locale);
     }
 
     /** Moves the calendar back one month */

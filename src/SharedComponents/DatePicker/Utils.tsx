@@ -1,4 +1,4 @@
-import { getDaysInMonth } from "date-fns";
+import { getDaysInMonth, startOfWeek } from "date-fns";
 
 export type DayTemplate = {
   dayName: string;
@@ -21,6 +21,10 @@ export type MonthTemplate = {
 let monthNameCache: { [locale: string]: string[] } = {};
 
 let dayNameCache: { [locale: string]: DayTemplate[] } = {};
+
+export const getWeekStartByLocale = (locale: string = "en-US"): number => {
+  return startOfWeek(new Date(), { locale, weekStartsOn: 0 }).getDay();
+};
 
 // Constructs a className from a set of prop keys.
 export const getClassName = (props: { [key: string]: unknown }) => {
@@ -50,11 +54,13 @@ export const daysInMonth = (month: number, year: number): number => {
 
 // Returns an array of days of the week for a header (and Grid styles for IE compat).
 export const getMonthHeaderTemplate = (locale: string = "en-US"): DayTemplate[] => {
+  const weekStartsOnByLocale = getWeekStartByLocale(locale);
+
   // Cache result in window.days.
   if (!Array.isArray(dayNameCache[locale])) {
     dayNameCache[locale] = [...Array(7)].map((_, i) => {
       // Get a date object set to i+[random sunday offset]th day.
-      const baseDate = new Date(Date.UTC(2017, 0, i + 2));
+      const baseDate = new Date(Date.UTC(2017, 0, i + 2 + weekStartsOnByLocale));
 
       // Get full name of this day.
       const dayName = baseDate.toLocaleDateString(locale, { weekday: "long" });
@@ -72,7 +78,9 @@ export const getMonthHeaderTemplate = (locale: string = "en-US"): DayTemplate[] 
 };
 
 // Returns an array of days of the month (and Grid styles for IE compat).
-export const getMonthTemplate = (month: number, year: number): MonthTemplate[] => {
+export const getMonthTemplate = (month: number, year: number, locale: string = "en-US"): MonthTemplate[] => {
+  const weekStartsOnByLocale = getWeekStartByLocale(locale);
+
   // Number of days in month.
   const numDaysInMonth = daysInMonth(month, year);
   // Days between Sunday and start of month.
@@ -81,7 +89,7 @@ export const getMonthTemplate = (month: number, year: number): MonthTemplate[] =
   let monthTemplates: MonthTemplate[] = [];
   for (let i = 0; i < numDaysInMonth; i++) {
     monthTemplates.push({
-      date: new Date(year, month - 1, i + 1),
+      date: new Date(year, month - 1, i + 1 + weekStartsOnByLocale),
       style: {
         msGridRow: Math.ceil((offset + i) / 7),
         msGridColumn: (((offset - 1) + i) % 7) + 1,
