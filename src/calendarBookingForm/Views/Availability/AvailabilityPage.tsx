@@ -9,7 +9,8 @@ import { EventDBO, EventVariantDBO } from "../../../typings/Event";
 import { FirstAvailability } from "../../../typings/FirstAvailability";
 import { getTimeslotsByDate } from "../../../Utils/helpers";
 import { AppDictionary } from "../../../typings/Languages";
-import CloseIcon from "../../../SharedComponents/Icons/CloseIcon";
+import { CloseIcon } from "../../../SharedComponents/Icons/CloseIcon";
+import { Weekdays } from "../../../Utils/Constants";
 
 export interface IAvailabilityPageProps {
   /** Sets the modal state in the index to "navigate" to a different view */
@@ -50,6 +51,8 @@ export interface IAvailabilityPageProps {
   locale: string;
   /** Event custom labels set in admin experience interface */
   labels: Partial<AppDictionary>;
+  /** Calendar start day as set in shop's Admin -> Settings panel */
+  weekStartsOn: Weekdays;
 }
 
 export interface IAvailabilityPageState {
@@ -154,7 +157,7 @@ export class AvailabilityPage extends Component<IAvailabilityPageProps, IAvailab
                 onClick={this.props.onClickBack}
               >
                 <span>&#8592;</span>
-            </button>}
+              </button>}
           <button id="MobileView-CloseBtn" onClick={this.handleCloseModal}>
             <CloseIcon />
           </button>
@@ -173,6 +176,7 @@ export class AvailabilityPage extends Component<IAvailabilityPageProps, IAvailab
             isDateEnabled={this.dateHasAvailablility}
             onChangeMonth={this.props.setNewAvailability}
             onChangeYear={this.props.setNewAvailability}
+            weekStartsOn={this.props.weekStartsOn}
           />
         </div>
         <div className="AvailabilityPage-TimeSlotContainer">

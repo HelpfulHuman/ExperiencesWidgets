@@ -18,9 +18,9 @@ import { FormFieldValueInput } from "../../../typings/FormFieldValueInput";
 import { plural } from "../../../Utils/helpers";
 import { CustomerInfoForm } from "../../Components/CustomerInfoForm";
 import { AppDictionary } from "../../../typings/Languages";
-import RequiredWarning from "../../../SharedComponents/Forms/RequiredWarning";
+import { RequiredWarning } from "../../../SharedComponents/Forms/RequiredWarning";
 import { OrderLineItemInputData } from "../../../typings/OrderLineItemInput";
-import CloseIcon from "../../../SharedComponents/Icons/CloseIcon";
+import { CloseIcon } from "../../../SharedComponents/Icons/CloseIcon";
 
 export interface IOrderDetailsPageProps {
   /** Quantities by event variant */

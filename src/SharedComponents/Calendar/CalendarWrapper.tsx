@@ -34,6 +34,7 @@ export interface ICalendarProps {
   customButtons?: any;
   headerToolbar?: any;
   showNonCurrentDates?: boolean;
+  firstDay?: number;
 }
 
 export type CalendarEvent = {
@@ -73,6 +74,7 @@ export class Calendar extends Component<ICalendarProps, any> {
       customButtons,
       headerToolbar,
       showNonCurrentDates,
+      firstDay,
     } = this.props;
 
     const FullCalendarCast = FullCalendar as unknown;
@@ -90,6 +92,7 @@ export class Calendar extends Component<ICalendarProps, any> {
         dateClick={dateClick}
         eventClick={eventClick}
         titleFormat={titleFormat}
+        firstDay={firstDay}
         dayMaxEventRows={dayMaxEventRows}
         ref={forwardRef}
         noEventsContent={noEventsContent}

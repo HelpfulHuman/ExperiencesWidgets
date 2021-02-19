@@ -5,6 +5,7 @@ import { addYears, addMonths, addWeeks, addDays, isSameDay, isBefore, isWithinIn
 import { Calendar } from "./Calendar";
 import "./index.css";
 import { AppDictionary } from "../../typings/Languages";
+import { Weekdays } from "../../Utils/Constants";
 
 
 export enum DatePickerType {
@@ -47,6 +48,8 @@ type DatePickerProps = {
   onChangeMonth(date: Date): void;
   /** Event custom labels set in admin experience interface */
   labels: Partial<AppDictionary>;
+  /** Calendar start day as set in shop's Admin -> Settings panel */
+  weekStartsOn: Weekdays;
 };
 
 type DatePickerState = {
@@ -426,6 +429,7 @@ export class DatePicker extends Component<DatePickerProps, DatePickerState> {
         locale={this.props.locale}
         disabled={this.props.disabled}
         labels={this.props.labels}
+        weekStartsOn={this.props.weekStartsOn}
       />
     );
   }

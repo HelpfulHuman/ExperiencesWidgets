@@ -293,7 +293,7 @@ export async function getEventCustomLabels({ baseUrl, shopId, shopifyProductId }
  * Gets custom scripts
  */
 export async function getCustomScripts({ baseUrl, shopId }: GetCustomScriptsArgs): Promise<GetCustomScriptsResponse> {
-  const res = await axios.get<GetCustomScriptsRequestBody, AxiosResponse<GetCustomScriptsResponse>>(`${baseUrl}/rest/shopSettings?shop=${shopId}&fields=customScripts&fields=trackingPixelUrl`);
+  const res = await axios.get<GetCustomScriptsRequestBody, AxiosResponse<GetCustomScriptsResponse>>(`${baseUrl}/rest/shopSettings?shop=${shopId}&fields=customScripts&fields=trackingPixelUrl&fields=weekStartsOn`);
 
   return res.data;
 }

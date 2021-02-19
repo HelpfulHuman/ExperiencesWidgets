@@ -19,6 +19,7 @@ import {
   AddToCartArgs,
   createOrder,
   CreateOrderArgs,
+  getCustomScripts,
   getEvent,
   getEventCustomLabels,
   getFirstAvailability,
@@ -33,6 +34,7 @@ import { ConfirmPage } from "../Confirmation/ConfirmPage";
 import { OrderDetailsPage } from "../OrderDetails/OrderDetailsPage";
 import "./CalendarWidgetMain.scss";
 import { FormField } from "../../../typings/CustomForm";
+import { Weekdays } from "../../../Utils/Constants";
 
 enum CUSTOM_FIELDS_TO_SKIP {
   firstName = "First Name",
@@ -65,6 +67,7 @@ const INITIAL_STATE: ICalendarWidgetMainState = {
   lineItems: [],
   customerInfo: null,
   labels: {},
+  weekStartsOn: Weekdays.Monday,
 };
 
 export type VariantInput = {
@@ -120,6 +123,8 @@ export interface ICalendarWidgetMainState {
   customerInfo: CustomerInputData | null;
   /** Event custom labels set in admin experience interface */
   labels: Partial<AppDictionary>;
+  /** Calendar start day as set in shop's Admin -> Settings panel */
+  weekStartsOn: Weekdays;
 }
 
 /** This is the root component of the app, it stores all of the state as the user completes their order */
@@ -148,7 +153,7 @@ export class CalendarWidgetMain extends Component<
 
     try {
       // fetch everything in parallel to improve loading time
-      const [shop, labels, event, availability] = await Promise.all([
+      const [shop, labels, event, availability, settings] = await Promise.all([
         // fetch the shop
         getShopDetails({ baseUrl, shopId: shopUrl }),
 
@@ -163,6 +168,8 @@ export class CalendarWidgetMain extends Component<
           this.state.now,
           availabilityRangeEnd,
         ),
+
+        getCustomScripts({ baseUrl, shopId: shopUrl }),
       ]);
 
       //add next month to the fetched month state
@@ -180,6 +187,10 @@ export class CalendarWidgetMain extends Component<
       const selectedDateTimeslots = date ? getTimeslotsByDate(availability, selectedDate) : [];
       const selectedTimeslot = selectedDateTimeslots.find(ts => (new Date(ts.startsAt)).getTime() === +date * 1000) || null;
 
+      const weekStartsOn = settings.weekStartsOn !== undefined ?
+        settings.weekStartsOn as Weekdays :
+        Weekdays.Monday;
+
       //set state with the fetched values
       this.setState({
         shop,
@@ -191,6 +202,7 @@ export class CalendarWidgetMain extends Component<
         loading: false,
         selectedDate,
         showModal: !!date,
+        weekStartsOn,
       }, () => {
         if (selectedTimeslot) {
           this.handleSelectTimeSlot(selectedTimeslot);
@@ -607,6 +619,7 @@ export class CalendarWidgetMain extends Component<
             confirmOrder={this.handleConfirmOrder}
             onSelectFirstAvailability={this.handleSelectFirstAvailability}
             onConfirmSelection={this.handleConfirmVariants}
+            weekStartsOn={this.state.weekStartsOn}
           />
         );
       case ModalStateEnum.OrderDetails:

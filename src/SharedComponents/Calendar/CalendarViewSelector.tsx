@@ -10,14 +10,22 @@ interface ICalendarViewSelectorProps {
 }
 
 export class CalendarViewSelector extends Component<ICalendarViewSelectorProps> {
+  selectListView = () => {
+    this.props.selectView(calendarViewType.list);
+  }
+
+  selectGridView = () => {
+    this.props.selectView(calendarViewType.dayGrid);
+  }
+
   render() {
-    const {selectView, view} = this.props;
+    const { view } = this.props;
 
     return (
       <div className="Calendar-ViewSelector">
         <div
           className={`MonthView ${view === calendarViewType.dayGrid ? "Selected" : ""}`}
-          onClick={() => selectView(calendarViewType.dayGrid)}
+          onClick={this.selectGridView}
         >
           <div className="CalendarIcon">
             <CalendarIcon />
@@ -26,7 +34,7 @@ export class CalendarViewSelector extends Component<ICalendarViewSelectorProps> 
         </div>
         <div
           className={`ListView ${view === calendarViewType.list ? "Selected" : ""}`}
-          onClick={() => selectView(calendarViewType.list)}
+          onClick={this.selectListView}
         >
           <div className="ListIcon">
             <ListIcon />

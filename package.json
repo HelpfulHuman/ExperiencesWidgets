@@ -82,6 +82,7 @@
     "rollup-watch": "4.3.1",
     "ts-jest": "24.0.2",
     "tslint": "5.19.0",
+    "timemachine": "0.3.2",
     "typescript": "3.5.3"
   }
 }

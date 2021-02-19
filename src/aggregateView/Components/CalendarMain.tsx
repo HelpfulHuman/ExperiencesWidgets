@@ -1,9 +1,9 @@
 import "./CalendarMain.scss";
-import { addDays, subDays, isAfter } from "date-fns/fp";
+import { addDays, isAfter, subDays } from "date-fns/fp";
 import { format } from "date-fns";
 import { Component, createRef, h } from "preact";
 import { CalendarViewSelector } from "../../SharedComponents/Calendar/CalendarViewSelector";
-import { fetchProductsWithAvailability } from "../../Utils/api";
+import { fetchProductsWithAvailability, getCustomScripts } from "../../Utils/api";
 import {
   Calendar,
   CalendarEvent,
@@ -17,6 +17,7 @@ import { CalendarDaySchedule } from "../../SharedComponents/Calendar/CalendarDay
 import { CalendarEventClick, DateClickEvent } from "../../typings/Calendar";
 import { CalendarNoEventsMessage } from "../../SharedComponents/Calendar/CalendarNoEventsMessage";
 import { Loading } from "../../SharedComponents/loading/Loading";
+import { Weekdays } from "../../Utils/Constants";
 
 interface ICalendarContainerProps {
   aggregateViewBaseUrl?: string;
@@ -38,6 +39,7 @@ interface ICalendarContainerState {
   start: Date; // tracks current start date of next and prev updates
   end: Date; // tracks current end date of next and prev updates
   loading: boolean;
+  weekStartsOn: Weekdays;
 }
 
 const eventRendererViewMap = {
@@ -56,11 +58,13 @@ export class CalendarContainer extends Component<ICalendarContainerProps, ICalen
     start: subDays(30)(new Date()),
     end: addDays(60)(new Date()),
     loading: false,
+    weekStartsOn: Weekdays.Monday,
   };
 
   async componentDidMount() {
-    const { defaultVew } = this.props;
+    const { defaultVew, shopUrl, baseUrl } = this.props;
     this.fetchEvents();
+    this.fetchSettings(baseUrl, shopUrl);
 
     // only show list view on smaller screens
     if (window && window.innerWidth < 768) {
@@ -98,6 +102,14 @@ export class CalendarContainer extends Component<ICalendarContainerProps, ICalen
     const newEnd = addDays(increment)(end);
     this.fetchEvents(start, newEnd);
     this.setState({ end: newEnd });
+  }
+
+  fetchSettings = async (baseUrl: string, shopId: string) => {
+    const settings = await getCustomScripts({ baseUrl, shopId });
+    const weekStartsOn = settings.weekStartsOn !== undefined ?
+      settings.weekStartsOn as Weekdays :
+      Weekdays.Monday;
+    this.setState({ weekStartsOn });
   }
 
   fetchEvents = async (start = this.state.start, end = this.state.end) => {
@@ -139,7 +151,7 @@ export class CalendarContainer extends Component<ICalendarContainerProps, ICalen
   handleClose = () => this.setState({ daySelected: null });
 
   render() {
-    const { fullCalendarEvents, view, daySelected, daySelectedEvents, loading } = this.state;
+    const { fullCalendarEvents, view, daySelected, daySelectedEvents, loading, weekStartsOn } = this.state;
     const titleFormat = window && window.innerWidth >= 1024 ? null : { month: "short", year: "numeric" };
 
     return (
@@ -160,6 +172,7 @@ export class CalendarContainer extends Component<ICalendarContainerProps, ICalen
             events={daySelectedEvents}
           />
           <Calendar
+            firstDay={weekStartsOn}
             showNonCurrentDates={false}
             dayMaxEventRows={4}
             eventClick={this.handleEventClick}

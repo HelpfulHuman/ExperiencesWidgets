@@ -4,7 +4,7 @@ interface IRequiredWarningProps {
     message: string;
 }
 
-const RequiredWarning = ({ message }: IRequiredWarningProps) => {
+export const RequiredWarning = ({ message }: IRequiredWarningProps) => {
     return (
         <div className="FormField-RequredWarning">
             <span className="">*</span>
@@ -13,5 +13,3 @@ const RequiredWarning = ({ message }: IRequiredWarningProps) => {
         </div>
     );
 };
-
-export default RequiredWarning;

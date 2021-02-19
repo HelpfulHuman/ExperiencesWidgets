@@ -1,7 +1,7 @@
 import { Component, createRef, h } from "preact";
 import { CalendarEvent } from "./CalendarWrapper";
 import "./CalendarDaySchedule.scss";
-import CloseIcon from "../Icons/CloseIcon";
+import { CloseIcon } from "../Icons/CloseIcon";
 import { format } from "date-fns";
 
 interface ICalendarDayScheduleProps {

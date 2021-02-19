@@ -10,12 +10,12 @@ function loadExpAppWidget(keyAttribute: string, scriptPath: string): void {
   const mountPoints = document.querySelectorAll(keyAttribute);
 
   if (mountPoints.length > 0) {
-    let head = document.getElementsByTagName('HEAD')[0];
+    let head = document.getElementsByTagName("HEAD")[0];
     let script = document.createElement("script");
     let styles = document.createElement("link");
 
     styles.rel = "stylesheet";
-    styles.type = 'text/css';
+    styles.type = "text/css";
     styles.href = scriptPath.replace(".js", ".css");
 
     script.src = scriptPath;
@@ -30,6 +30,6 @@ const baseUrl = "__BASE_URL__/public/__ENV_NAME__";
 loadExpAppWidget("[data-expapp-gallery]", `${baseUrl}/expAppListView.js`);
 loadExpAppWidget(
   "[data-expapp-calendar-booking-form]",
-  `${baseUrl}/calendarBookingForm.js`
+  `${baseUrl}/calendarBookingForm.js`,
 );
 loadExpAppWidget("[data-expapp-aggregate-view]", `${baseUrl}/aggregateView.js`);

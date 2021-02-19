@@ -9,6 +9,7 @@ import {
 } from "./Utils";
 import { isToday } from "date-fns";
 import { AppDictionary } from "../../typings/Languages";
+import { Weekdays } from "../../Utils/Constants";
 
 type CalendarProps = {
     /** Gives a unique reference to the top level calendar node */
@@ -49,20 +50,22 @@ type CalendarProps = {
     locale?: string;
     /** Event custom labels set in admin experience interface */
     labels: Partial<AppDictionary>;
+    /** Calendar start day as set in shop's Admin -> Settings panel */
+    weekStartsOn: Weekdays;
 };
 
 /** Top Level Calendar component */
 export class Calendar extends Component<CalendarProps> {
     /** returns the month name based on the locale for the current header */
     get headerTemplate() {
-        const { locale } = this.props;
-        return getMonthHeaderTemplate(locale);
+        const { locale, weekStartsOn } = this.props;
+        return getMonthHeaderTemplate(locale, weekStartsOn);
     }
 
     /** returns all the days in the month with the correct offset for that month */
     get monthTemplate() {
-        const { month, year, locale } = this.props;
-        return getMonthTemplate(month, year || 0, locale);
+        const { month, year, weekStartsOn } = this.props;
+        return getMonthTemplate(month, year || 0, weekStartsOn);
     }
 
     /** Moves the calendar back one month */
