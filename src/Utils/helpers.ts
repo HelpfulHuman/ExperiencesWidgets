@@ -63,7 +63,7 @@ export function getFirstDayAvailabilities(data: FirstAvailability): Availability
   const firstMonth = firstYear[Object.keys(firstYear)[0]] || {};
   const firstWeek = firstMonth[Object.keys(firstMonth)[0]] || {};
 
-  return firstWeek[Object.keys(firstWeek)[0]].filter(a => a.unitsLeft > 0) || [];
+  return firstWeek[Object.keys(firstWeek)[0]].filter(a => a && a.unitsLeft > 0) || [];
 }
 
 /**
