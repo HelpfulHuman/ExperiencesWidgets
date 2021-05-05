@@ -1,70 +1,72 @@
+@import "../../sass/_variables.scss";
+
 .VariantHeader-Container {
-   text-align: center;
-   padding: 0 1.5rem;
+  text-align: center;
+  padding: 0 1.5rem;
 }
 
-.VariantHeader-Container>p {
-    margin: 0;
+.VariantHeader-Container > p {
+  margin: 0;
 }
 
 .VariantHeader-BackBtn {
-    border: none;
-    background: none;
-    color: $color-primary-blue;
-    text-decoration: underline;
-    display: block;
-    margin: 0 auto;
-    line-height: 1rem;
-    font-weight: 600;
-    cursor: pointer;
+  border: none;
+  background: none;
+  color: $color-primary-blue;
+  text-decoration: underline;
+  display: block;
+  margin: 0 auto;
+  line-height: 1rem;
+  font-weight: 600;
+  cursor: pointer;
 }
 .VariantHeader-DateSelected {
-    text-align: center;
-    font-size: 1rem;
-    display: block;
-    margin: 1rem 0 .5rem 0;
+  text-align: center;
+  font-size: 1rem;
+  display: block;
+  margin: 1rem 0 0.5rem 0;
 }
-.VariantHeader-Container>span {
-    margin: 0 0 .5rem 0;
+.VariantHeader-Container > span {
+  margin: 0 0 0.5rem 0;
 }
 #VariantHeader-StartTime {
-    font-size: 1rem;
-    color: $color-primary-blue;
-    display: block;
+  font-size: 1rem;
+  color: $color-primary-blue;
+  display: block;
 }
 #VariantHeader-SpotsAvailable {
-    font-size: 12px;
-    font-weight: 500;
+  font-size: 12px;
+  font-weight: 500;
 }
 
-@include Phone { 
-    .VariantHeader-BackBtn {
-        display: none;
-    }
+@include Phone {
+  .VariantHeader-BackBtn {
+    display: none;
+  }
 
-    .VariantHeader-MobileContainer {
-        padding: 1rem;
-    }
+  .VariantHeader-MobileContainer {
+    padding: 1rem;
+  }
 
-    .VariantHeader-DateSelected {
-        margin: 0px;
-    }
+  .VariantHeader-DateSelected {
+    margin: 0px;
+  }
 
-    .VariantHeader-Container {
-        background-color: #F5F5F5;
-    }
+  .VariantHeader-Container {
+    background-color: #f5f5f5;
+  }
 
-    .Variant-QtyBtnContainer {
-        min-width: 6rem;
-    }
+  .Variant-QtyBtnContainer {
+    min-width: 6rem;
+  }
 }
 
 @include Tablet {
-    #VariantHeader-StartTime {
-        display: inline;
-    }
-    #VariantHeader-SpotsAvailable::before {
-        color: black;
-        content: "\00a0\00a0|\00a0\00a0"
-    }
+  #VariantHeader-StartTime {
+    display: inline;
+  }
+  #VariantHeader-SpotsAvailable::before {
+    color: black;
+    content: "\00a0\00a0|\00a0\00a0";
+  }
 }
