@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import { Availability } from "../typings/Availability";
 import { Cart } from "../typings/Cart";
 import { CustomScripts } from "../typings/CustomScripts";
-import { EventDBO } from "../typings/Event";
+import { EventDBO, IProduct } from "../typings/Event";
 import { FirstAvailability } from "../typings/FirstAvailability";
 import { FormAttendee } from "../typings/FormAttendee";
 import { OrderInputData } from "../typings/CreateOrderInput";
@@ -87,10 +87,18 @@ type GetEventArgs = {
   shopifyProductId: number;
 } & APIArguments;
 
+type GetProductArgs = {
+  shopifyProductId: number;
+} & APIArguments;
+
 type GetCustomFormRequestBody = {};
 
 type GetEventResponse = {
   data: EventDBO;
+};
+
+type GetProductResponse = {
+  data: IProduct;
 };
 
 type GetCustomScriptsArgs = APIArguments;
@@ -202,7 +210,7 @@ export type SdkLineItemInput = {
 export function sendJSON<RequestBody, ResponseBody>(
   method: HttpMethod,
   url: string,
-  body?: RequestBody
+  body?: RequestBody,
 ): Promise<HttpResponse<ResponseBody>> {
   return new Promise((accept, reject) => {
     // create the requeset object
@@ -318,6 +326,19 @@ export async function getEvent({
   return res.data;
 }
 
+export async function getProduct({
+  baseUrl,
+  shopId,
+  shopifyProductId,
+}: GetProductArgs): Promise<GetProductResponse> {
+  const res = await axios.get<
+    GetCustomFormRequestBody,
+    AxiosResponse<GetProductResponse>
+  >(`${baseUrl}/rest/product/?shop=${shopId}&productId=${shopifyProductId}`);
+
+  return res.data;
+}
+
 /**
  * Fetches custom event labels set in admin interface of an experience
  */
@@ -330,7 +351,7 @@ export async function getEventCustomLabels({
     GetCustomFormRequestBody,
     AxiosResponse<GetEventCustomLabelsResponse>
   >(
-    `${baseUrl}/rest/event/custom-labels?productId=${shopifyProductId}&shop=${shopId}`
+    `${baseUrl}/rest/event/custom-labels?productId=${shopifyProductId}&shop=${shopId}`,
   );
 
   return res.data;
@@ -347,7 +368,7 @@ export async function getCustomScripts({
     GetCustomScriptsRequestBody,
     AxiosResponse<GetCustomScriptsResponse>
   >(
-    `${baseUrl}/rest/shopSettings?shop=${shopId}&fields=customScripts&fields=trackingPixelUrl&fields=weekStartsOn`
+    `${baseUrl}/rest/shopSettings?shop=${shopId}&fields=customScripts&fields=trackingPixelUrl&fields=weekStartsOn`,
   );
 
   return res.data;
@@ -380,7 +401,7 @@ export async function addToCart(
     disableRedirect = DisableRedirect.None,
     onCartAdd,
     storefrontAccessToken,
-  }: AddToCartOptions
+  }: AddToCartOptions,
 ): Promise<void> {
   // Extract "When" string from timeslot
   const When: string = timeslot.formattedTimeslot.when;
@@ -414,7 +435,7 @@ export async function addToCart(
 
       // Populate formatted SDK/Shopify-approved line items list
       const sdkLineItems: SdkLineItemInput[] = [];
-      
+
       // For per-attendee events
       if (Array.isArray(attendees) && attendees.length > 0) {
         for (const attendee of attendees) {
@@ -486,7 +507,7 @@ export async function addToCart(
 
       await sbClient.checkout.addLineItems(
         sdkCart.id,
-        (sdkLineItems as unknown) as LineItem[]
+        (sdkLineItems as unknown) as LineItem[],
       );
 
       // Navigate to checkout URL
@@ -574,7 +595,7 @@ export async function addToCart(
       if (error) {
         console.error(
           "Failed to add an item to the cart after multiple attempts.",
-          request
+          request,
         );
         throw error;
       }
@@ -598,8 +619,8 @@ export async function getCart(shopUrl?: string): Promise<GetCartResponse> {
   >(cartUrl, {
     headers: {
       "Content-Type": "application/json",
-      "Accept": "application/json",
-    }
+      Accept: "application/json",
+    },
   });
   //const res = await sendJSON<GetCartRequestBody, GetCartResponse>("GET", cartUrl);
 
@@ -620,7 +641,7 @@ export async function fetchProductsWithAvailability(
   baseUrl: string,
   shop: string,
   startsAt: Date | string,
-  endsAt: Date | string
+  endsAt: Date | string,
 ): Promise<EventAvailability[]> {
   // Clone incoming end date so we keep things pure
   const endDateClone = new Date(endsAt);

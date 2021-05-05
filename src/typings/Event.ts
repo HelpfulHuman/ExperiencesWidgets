@@ -16,7 +16,7 @@ export type EventDBO = {
   hostImage?: EventAssetLinkDBO;
   hostDescription?: string;
   images: EventAssetLinkDBO[];
-  languageCode: LanguageCode,
+  languageCode: LanguageCode;
   location?: string;
   minLimit: number;
   maxLimit: number;
@@ -24,18 +24,19 @@ export type EventDBO = {
   orderUpdatedEmailTemplateId: IObjectID | null;
   orderCancelledEmailTemplateId: IObjectID | null;
   paymentType: PaymentType;
-  publishedAt: null | Date
+  products?: IProductCollection[];
+  publishedAt: null | Date;
   reminderEmailTemplateId: IObjectID | null;
   summary: string;
   shopId: IObjectID;
   shopifyProductId: number | null;
   shopifyShopId: number;
   startsAt?: Date;
-  tags: string[], // TODO: Determine how to keep these in sync with shopify tags
+  tags: string[]; // TODO: Determine how to keep these in sync with shopify tags
   ticketedEvent: boolean;
   ticketTemplateId: IObjectID | null;
   updatedAt: Date;
-  variants: EventVariantDBO[],
+  variants: EventVariantDBO[];
 };
 
 export enum TaxStatus {
@@ -72,6 +73,15 @@ export enum FormFieldType {
   Phone = "Phone",
 }
 
+export type IProductCollection = {
+  /**Product ID */
+  id: number;
+};
+export type IProduct = {
+  /**Product ID */
+  id: number;
+};
+
 export type EventAssetLinkDBO = {
   id: IObjectID;
   featured: boolean;
@@ -84,8 +94,8 @@ export enum PaymentType {
 }
 
 export type EventVariantDBO = {
-  shopifyProductId?: number,
-  shopifyVariantId?: number,
+  shopifyProductId?: number;
+  shopifyVariantId?: number;
   name: string;
   price: number;
 };
