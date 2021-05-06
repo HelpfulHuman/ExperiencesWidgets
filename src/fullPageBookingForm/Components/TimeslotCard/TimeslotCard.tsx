@@ -15,6 +15,7 @@ export type TimeslotCardProps = {
   minPrice: number;
   onSelect: () => void;
   moneyFormat: string;
+  productUnitsRemaining: number | null;
 };
 
 export const TimeslotCard: FunctionComponent<TimeslotCardProps> = ({
@@ -25,6 +26,7 @@ export const TimeslotCard: FunctionComponent<TimeslotCardProps> = ({
   minPrice,
   moneyFormat,
   onSelect,
+  productUnitsRemaining,
 }) => {
   const formattedStartsAt = moment(startsAt).tz(timezone).format("h:mma");
   const formattedEndsAt = moment(endsAt).tz(timezone).format("h:mma");
@@ -34,6 +36,10 @@ export const TimeslotCard: FunctionComponent<TimeslotCardProps> = ({
   if (remainingSpots === 0) {
     timeslotClassNames.push("timeslot-card--is-disabled");
   }
+
+  const isSoldOut =
+    remainingSpots === 0 ||
+    (productUnitsRemaining && productUnitsRemaining === 0);
 
   return (
     <Card>
@@ -60,10 +66,10 @@ export const TimeslotCard: FunctionComponent<TimeslotCardProps> = ({
         </div>
         <div className="timeslot-card__button">
           <Button
-            color={remainingSpots === 0 ? "grayed" : "primary"}
-            text={remainingSpots === 0 ? "Sold Out" : "Select"}
+            color={isSoldOut ? "grayed" : "primary"}
+            text={isSoldOut ? "Sold Out" : "Select"}
             onClick={onSelect}
-            disabled={remainingSpots === 0}
+            disabled={isSoldOut}
           />
         </div>
       </div>

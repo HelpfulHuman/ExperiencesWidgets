@@ -22,6 +22,7 @@ import { useAvailabilities } from "./useAvailabilities";
 import "./TimeslotSelection.scss";
 import { Button } from "../../Common/Button";
 import { Donger } from "../../Common/Icon/Donger";
+import { useProduct } from "../../../Hooks/useProduct";
 
 export type TimeslotSelectionProps = {
   /**Format for money in shop. */
@@ -41,6 +42,9 @@ export const TimeslotSelection: FunctionComponent<TimeslotSelectionProps> = ({
   const [currentMonth, setCurrentMonth] = useState(currentDate.getMonth());
   const [currentYear, setCurrentYear] = useState(currentDate.getFullYear());
   const { isFetchingEvent, event } = useEvent();
+  const { isFetchingProduct, products } = useProduct();
+  const isLoading = isFetchingEvent || isFetchingProduct;
+
   const {
     isFetchingInitialAvailabilities,
     isFetchingMoreAvailabilities,
@@ -154,6 +158,20 @@ export const TimeslotSelection: FunctionComponent<TimeslotSelectionProps> = ({
     return daysToRender;
   };
 
+  // const totalProductsRemaining = useMemo(
+  //   () =>
+  //     []
+  //       .concat(
+  //         ...products.map((product) => [
+  //           ...product.variants.map((variant) => variant.inventory_quantity),
+  //         ]),
+  //       )
+  //       .reduce((total, current) => total + current, null),
+  //   [isFetchingProduct],
+  // );
+
+  const totalProductsRemaining = 0;
+
   const renderTimeslots = () => {
     if (isFetchingInitialAvailabilities) {
       return null;
@@ -187,6 +205,7 @@ export const TimeslotSelection: FunctionComponent<TimeslotSelectionProps> = ({
                 remainingSpots: timeslot.unitsLeft,
                 timezone: timeslot.timezone,
                 onSelect: handleSelect,
+                productUnitsRemaining: totalProductsRemaining,
               };
             })}
           />
@@ -198,7 +217,7 @@ export const TimeslotSelection: FunctionComponent<TimeslotSelectionProps> = ({
   return (
     <Fragment>
       <WizardModalTitleBar title="Select dates" onBack={handleClose}>
-        {!isFetchingEvent && (
+        {!isLoading && (
           <button
             className="timeslot-selection__calendar-button"
             onClick={handleCalendarDrawerToggle}
@@ -207,7 +226,7 @@ export const TimeslotSelection: FunctionComponent<TimeslotSelectionProps> = ({
           </button>
         )}
       </WizardModalTitleBar>
-      {isFetchingEvent ? (
+      {isLoading ? (
         <div style={{ textAlign: "center" }}>
           <TextStyle variant="display2" text="Loading experience data..." />
         </div>

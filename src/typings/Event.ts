@@ -77,9 +77,15 @@ export type IProductCollection = {
   /**Product ID */
   id: number;
 };
+
+export type IVariant = {
+  inventory_quantity: number;
+};
+
 export type IProduct = {
   /**Product ID */
   id: number;
+  variants: IVariant[];
 };
 
 export type EventAssetLinkDBO = {
