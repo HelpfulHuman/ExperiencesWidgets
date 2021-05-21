@@ -4,16 +4,22 @@ $title-bar-height: 68px;
 
 .wizard-modal {
   position: fixed;
-  inset: 0px;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
   z-index: 10000;
   opacity: 0;
   transform: translateY(100%);
   transition: all 0.4s ease-in-out;
+  -webkit-transform: translateY(100%);
+  -webkit-transition: all 0.4s ease-in-out;
 }
 
 .wizard-modal.ReactModal__Overlay--after-open {
   opacity: 1;
   transform: translateY(0);
+  -webkit-transform: translateY(0);
 }
 
 .wizard-modal.ReactModal__Overlay--before-close {
@@ -26,7 +32,10 @@ $title-bar-height: 68px;
   background: rgb(255, 255, 255);
   overflow: auto;
   outline: none;
-  inset: 0;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
   border: none;
 }
 

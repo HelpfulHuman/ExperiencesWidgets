@@ -8,6 +8,7 @@ test("Renders content correctly", () => {
     <TimeslotGroup
       timeslots={[
         {
+          moneyFormat: "$",
           startsAt: new Date("March 17, 2021 06:00:00"),
           endsAt: new Date("March 17, 2021 10:00:00"),
           remainingSpots: 4,
@@ -16,6 +17,7 @@ test("Renders content correctly", () => {
           onSelect: jest.fn(),
         },
         {
+          moneyFormat: "$",
           startsAt: new Date("March 17, 2021 11:30:00"),
           endsAt: new Date("March 17, 2021 12:00:00"),
           remainingSpots: 4,
@@ -24,6 +26,7 @@ test("Renders content correctly", () => {
           onSelect: jest.fn(),
         },
         {
+          moneyFormat: "$",
           startsAt: new Date("March 17, 2021 14:30:00"),
           endsAt: new Date("March 17, 2021 16:30:00"),
           remainingSpots: 4,

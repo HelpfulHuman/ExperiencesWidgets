@@ -47,14 +47,18 @@ export class TimeSlotList extends Component<
    */
   renderTimeSlots = () => {
     const { timeslots, selectedDate, locale, labels } = this.props;
-    const noAvailableTimeSlots = !Object.keys(this.props.availability).length;
+    const noAvailableTimeSlots =
+      !Object.keys(this.props.availability).length ||
+      !this.props.timeslots.some((timeslot) => timeslot.unitsLeft > 0);
 
     if (!timeslots || !Array.isArray(timeslots) || !timeslots.length) {
       return (
         <div className="TimeSlots">
           <div className="TimeSlots-NotAvailable">
             <span className="TimeSlot-DateSelected">
-              {format(new Date(this.props.selectedDate), "EEEE MMMM d, yyyy", { locale: localeMap[locale] })}
+              {format(new Date(this.props.selectedDate), "EEEE MMMM d, yyyy", {
+                locale: localeMap[locale],
+              })}
             </span>
             <p>{labels.nothingIsAvailableTodayLabel}</p>
             <button
@@ -62,7 +66,9 @@ export class TimeSlotList extends Component<
               className="TimeSlots-NextAvailableBtn"
               disabled={noAvailableTimeSlots}
             >
-              {noAvailableTimeSlots ? "This event is sold out" : labels.goToNextAvailableLabel}
+              {noAvailableTimeSlots
+                ? "This event is sold out"
+                : labels.goToNextAvailableLabel}
             </button>
           </div>
         </div>
@@ -77,7 +83,7 @@ export class TimeSlotList extends Component<
         </div>
       );
     }
-  }
+  };
 
   /**
    * This function is used to iterate over the list of
@@ -86,12 +92,18 @@ export class TimeSlotList extends Component<
    */
   renderTimeslot = (timeslot: Availability): JSX.Element => {
     return (
-      <TimeSlot labels={this.props.labels} timeslot={timeslot} onSelectTimeSlot={this.props.onSelectTimeSlot} />
+      <TimeSlot
+        labels={this.props.labels}
+        timeslot={timeslot}
+        onSelectTimeSlot={this.props.onSelectTimeSlot}
+      />
     );
-  }
+  };
 
   /** render */
   render() {
-    return <div className="SelectedDateContainer">{this.renderTimeSlots()}</div>;
+    return (
+      <div className="SelectedDateContainer">{this.renderTimeSlots()}</div>
+    );
   }
 }

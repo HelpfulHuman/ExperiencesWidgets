@@ -2,7 +2,10 @@ import { h, Component } from "preact";
 import { ModalStateEnum } from "../../types";
 import { TimeSlotList } from "../../Components/TimeSlotList";
 import { Availability } from "../../../typings/Availability";
-import { DatePicker, DatePickerType } from "../../../SharedComponents/DatePicker";
+import {
+  DatePicker,
+  DatePickerType,
+} from "../../../SharedComponents/DatePicker";
 import "./AvailabilityPage.scss";
 import { VariantList } from "../../Components/VariantList";
 import { EventDBO, EventVariantDBO } from "../../../typings/Event";
@@ -62,30 +65,42 @@ export interface IAvailabilityPageState {
 /**
  * This component is the higher order top level component that renders everything
  * related to selecting a timeslot, variant, and quantity
- * 
+ *
  * includes:
  * choosing a date
  * choosing a time slot
  * choosing variants
  * choosing quantity per variant
- * 
+ *
  */
-export class AvailabilityPage extends Component<IAvailabilityPageProps, IAvailabilityPageState> {
+export class AvailabilityPage extends Component<
+  IAvailabilityPageProps,
+  IAvailabilityPageState
+> {
   /** Set initial timeslot array to the timeslots for the current date (if available) */
   constructor(props: IAvailabilityPageProps) {
     super(props);
     this.state = {
-      timeslots: (this.props.availability && getTimeslotsByDate(this.props.availability, this.props.selectedDate || new Date())),
+      timeslots:
+        this.props.availability &&
+        getTimeslotsByDate(
+          this.props.availability,
+          this.props.selectedDate || new Date(),
+        ),
     };
   }
-
 
   /** When the user's selected date changes, set state to appropriate timeslots if available */
   componentDidUpdate(prevProps: IAvailabilityPageProps) {
     if (prevProps.selectedDate !== this.props.selectedDate) {
       const now = new Date();
       this.setState({
-        timeslots: (this.props.availability && getTimeslotsByDate(this.props.availability, this.props.selectedDate || now)),
+        timeslots:
+          this.props.availability &&
+          getTimeslotsByDate(
+            this.props.availability,
+            this.props.selectedDate || now,
+          ),
       });
     }
   }
@@ -128,19 +143,22 @@ export class AvailabilityPage extends Component<IAvailabilityPageProps, IAvailab
         />
       );
     }
-  }
+  };
 
   /** Boolean to determine whether a given date has availability */
   dateHasAvailablility = (date: Date): boolean => {
     const { availability } = this.props;
-    const timeslots = (availability && getTimeslotsByDate(availability, date));
-    const enabled = (timeslots && timeslots.length > 0) ? true : false; // Array.isArray(timeslots) &&
+    const timeslots = availability && getTimeslotsByDate(availability, date);
+    const enabled =
+      timeslots &&
+      timeslots.length > 0 &&
+      timeslots.some((timeslot) => timeslot.unitsLeft > 0);
     return enabled;
-  }
+  };
   /** when clicked the model will close for the mobile view */
   handleCloseModal = () => {
     this.props.closeModal();
-  }
+  };
 
   /** Main render method, renders the calendar and the dynamic right side of the view */
   public render() {
@@ -149,7 +167,7 @@ export class AvailabilityPage extends Component<IAvailabilityPageProps, IAvailab
         <div className="AvailabilityPage-DatePickerContainer">
           <div className="MobileView-Header">
             {/* Back button only for when time slot selected */}
-            {!!this.props.selectedTimeslot && 
+            {!!this.props.selectedTimeslot && (
               <button
                 className="BackButton"
                 title="Previous Month"
@@ -157,13 +175,16 @@ export class AvailabilityPage extends Component<IAvailabilityPageProps, IAvailab
                 onClick={this.props.onClickBack}
               >
                 <span>&#8592;</span>
-              </button>}
-          <button id="MobileView-CloseBtn" onClick={this.handleCloseModal}>
-            <CloseIcon />
-          </button>
+              </button>
+            )}
+            <button id="MobileView-CloseBtn" onClick={this.handleCloseModal}>
+              <CloseIcon />
+            </button>
             <p>
               {/* If a date has been selected then select quantity view will appear */}
-              {!!this.props.selectedTimeslot ? "Select quantity" : this.props.event.name} 
+              {!!this.props.selectedTimeslot
+                ? "Select quantity"
+                : this.props.event.name}
             </p>
           </div>
           <DatePicker

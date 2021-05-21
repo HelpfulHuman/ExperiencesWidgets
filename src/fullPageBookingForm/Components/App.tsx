@@ -1,6 +1,5 @@
 /** @jsx h */
 import { h, FunctionComponent } from "preact";
-import { useConnectActivators } from "../Hooks/useConnectActivators";
 import { BookingFormPage } from "../Typings/BookingFormPage";
 import { WizardModal } from "./Common/WizardModal";
 import { TimeslotSelection } from "./Views/TimeslotSelection";
@@ -29,11 +28,14 @@ import {
   QuantitySelectionStore,
   useQtySelectionStore,
 } from "../Hooks";
+import { useConnectActivators } from "../Hooks/useConnectActivators";
+
 export type AppProps = {
   baseUrl: string;
   languageCode: string;
   shopUrl: string;
   shopifyProductId: number;
+  autoOpen?: number;
 };
 
 export const App: FunctionComponent<AppProps> = ({
@@ -41,7 +43,13 @@ export const App: FunctionComponent<AppProps> = ({
   shopUrl,
   shopifyProductId,
   languageCode,
+  autoOpen,
 }) => {
+  //Proxied version of app is requested, which is automatically open on mount.
+  const isOpenOnMount = autoOpen === 1;
+
+  const { open, setOpen } = useConnectActivators();
+
   const [moneyFormat, setMoneyFormat] = useState("${{amount}}");
   const [initialCustomerFormStore] = useState<CustomerFormStore>(
     useCustomerFormStore.getState(),
@@ -83,7 +91,6 @@ export const App: FunctionComponent<AppProps> = ({
     return resetOrderDetailsStores;
   }, []);
 
-  const { open, setOpen } = useConnectActivators();
   const event = useEventStore((state) => state.event);
   const selectedTimeslot = useTimeslotStore((state) => state.selectedTimeslot);
   const [labels, setLabels] = useState<Partial<AppDictionary>>({});
@@ -94,7 +101,7 @@ export const App: FunctionComponent<AppProps> = ({
       const labelResponse = await getEventCustomLabels({
         baseUrl,
         shopId: shopUrl,
-        shopifyProductId,
+        shopifyProductId: shopifyProductId,
       });
 
       const labelsResolved =
@@ -112,8 +119,14 @@ export const App: FunctionComponent<AppProps> = ({
   }, []);
 
   const handleClose = () => {
-    resetOrderDetailsStores();
-    setOpen(false);
+    //For non proxied version of application, we want to close the modal on click of "X" button.
+    //Otherwise, redirect to the previous shopify page.
+    if (!isOpenOnMount) {
+      resetOrderDetailsStores();
+      setOpen(false);
+    } else {
+      location.href = document.referrer;
+    }
   };
 
   const customerEmail = useCustomerFormStore(
@@ -135,7 +148,7 @@ export const App: FunctionComponent<AppProps> = ({
       data={{ baseUrl, shopUrl, shopifyProductId, languageCode }}
     >
       <WizardModal
-        open={open}
+        open={isOpenOnMount ? isOpenOnMount : open}
         initialPage={BookingFormPage.TIMESLOT_SELECTION}
         hideCloseButton={hideCloseButton}
         hideTitleBar={hideTitleBar}

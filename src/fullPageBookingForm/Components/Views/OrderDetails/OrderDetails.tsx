@@ -388,7 +388,7 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({
     return (
       <Button
         text={labels.confirmReservationButtonLabel}
-        variant="outlined"
+        variant="contained"
         fullWidth
         color="primary"
         onClick={handleClick}
@@ -410,7 +410,7 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({
     return (
       <Button
         text={"Save & continue"}
-        variant="outlined"
+        variant="contained"
         fullWidth
         color="primary"
         onClick={handleClick}
@@ -430,7 +430,7 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({
       <div className="OrderDetails__Button" ref={setEditRef}>
         <Button
           text="Edit"
-          variant="outlined"
+          variant="contained"
           fullWidth
           color="primary"
           onClick={handleClick}
