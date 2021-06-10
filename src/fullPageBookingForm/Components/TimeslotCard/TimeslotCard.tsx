@@ -1,36 +1,57 @@
 /** @jsx h */
 import { h, FunctionComponent, Fragment } from "preact";
-import moment from "moment-timezone";
+import { useState } from "preact/hooks";
 import { Button } from "../Common/Button";
 import { Card } from "../Common/Card";
 import { TextStyle } from "../Common/TextStyle";
 import "./TimeslotCard.scss";
 import { formatCurrency } from "../../../Utils/helpers";
 import { AppDictionary } from "../../../typings/Languages";
+import { FormattedTimeslot } from "../../../typings/FormattedTimeslot";
+import { TimeslotOccurrenceToggle } from "./TimeslotOccurrenceToggle";
 
 export type TimeslotCardProps = {
   startsAt: Date;
   endsAt: Date;
   timezone: string;
+  formattedTimeslot: FormattedTimeslot;
   remainingSpots: number;
   minPrice: number;
   onSelect: () => void;
   moneyFormat: string;
   labels: Partial<AppDictionary>;
+  occurrenceId?: string;
+  occurrence?: {
+    id: string;
+    startsAt: Date;
+    endsAt: Date;
+    formattedTimeslot: FormattedTimeslot;
+  }[];
 };
 
 export const TimeslotCard: FunctionComponent<TimeslotCardProps> = ({
-  startsAt,
-  endsAt,
-  timezone,
+  formattedTimeslot,
   remainingSpots,
   minPrice,
   moneyFormat,
   onSelect,
   labels,
+  occurrenceId,
+  occurrence,
 }) => {
-  const formattedStartsAt = moment(startsAt).tz(timezone).format("h:mma");
-  const formattedEndsAt = moment(endsAt).tz(timezone).format("h:mma");
+  const [activeOccurrences, setActiveOccurrences] = useState<string[]>([]);
+
+  const handleOccurrenceToggle = (occurrenceId: string) => {
+    let activeOccurrencesClone = [...activeOccurrences];
+
+    if (activeOccurrencesClone.includes(occurrenceId)){
+      activeOccurrencesClone.splice(activeOccurrences.indexOf(occurrenceId), 1);
+    } else {
+      activeOccurrencesClone.push(occurrenceId);
+    }
+
+    setActiveOccurrences(activeOccurrencesClone);
+  };
 
   let timeslotClassNames = ["timeslot-card"];
 
@@ -48,6 +69,18 @@ export const TimeslotCard: FunctionComponent<TimeslotCardProps> = ({
       : "spot left"
   }`;
 
+  const timeslotInfo = !!occurrence?.length
+    ? `${occurrence[0].formattedTimeslot.date} – ${occurrence[occurrence.length - 1].formattedTimeslot.date}`
+    : formattedTimeslot.timeRange;
+
+  const occurrenceInfo = !!occurrence?.length && (
+    <ul className={`timeslot-card__occurrence${!!~activeOccurrences.indexOf(occurrenceId) ? " active" : ""}`}>
+      {occurrence.map((ts) =>
+        <li key={ts.id} className="timeslot-card__occurrence__node">{ts.formattedTimeslot.date}, {ts.formattedTimeslot.timeRange}</li>)
+      }
+    </ul>
+  );
+
   return (
     <Card>
       <div className={timeslotClassNames.join(" ")} data-testid="timeslot-card">
@@ -57,7 +90,7 @@ export const TimeslotCard: FunctionComponent<TimeslotCardProps> = ({
               variant="body1"
               text={
                 <Fragment>
-                  {formattedStartsAt} &ndash; {formattedEndsAt} |{" "}
+                  {timeslotInfo}{" | "}
                 </Fragment>
               }
             />
@@ -94,6 +127,13 @@ export const TimeslotCard: FunctionComponent<TimeslotCardProps> = ({
             disabled={remainingSpots === 0}
           />
         </div>
+        {!!occurrence && (
+          <TimeslotOccurrenceToggle
+            active={!!~activeOccurrences.indexOf(occurrenceId)}
+            clickFunction={handleOccurrenceToggle.bind(null, occurrenceId)}
+          />
+        )}
+        {occurrenceInfo}
       </div>
     </Card>
   );

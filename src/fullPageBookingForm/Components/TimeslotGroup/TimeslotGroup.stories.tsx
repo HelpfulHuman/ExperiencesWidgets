@@ -1,6 +1,8 @@
 /** @jsx h */
 import { h } from "preact";
 import { TimeslotGroup } from "./TimeslotGroup";
+import { formatTimeslot } from "../../../typings/FormattedTimeslot";
+import { defineLanguageDictionary } from "../../../typings/Languages";
 
 export default {
   title: "Full Page Booking Form/App/Timeslot Group",
@@ -14,28 +16,38 @@ export const Basic = () => (
         {
           startsAt: new Date("March 17, 2021 06:00:00"),
           endsAt: new Date("March 17, 2021 10:00:00"),
+          formattedTimeslot: formatTimeslot(new Date("March 17, 2021 06:00:00"), new Date("March 17, 2021 10:00:00"), "America/Los_Angeles"),
           remainingSpots: 4,
           minPrice: 150,
-          timezone: "Asia/Manila",
+          timezone: "America/Los_Angeles",
           onSelect: () => {},
+          moneyFormat: "${{amount}}",
+          labels: defineLanguageDictionary("en-US"),
         },
         {
-          startsAt: new Date("March 17, 2021 11:30:00"),
-          endsAt: new Date("March 17, 2021 12:00:00"),
+          startsAt: new Date("March 17, 2021 10:00:00"),
+          endsAt: new Date("March 17, 2021 13:00:00"),
+          formattedTimeslot: formatTimeslot(new Date("March 17, 2021 10:00:00"), new Date("March 17, 2021 13:00:00"), "America/Los_Angeles"),
           remainingSpots: 4,
           minPrice: 150,
-          timezone: "Asia/Manila",
+          timezone: "America/Los_Angeles",
           onSelect: () => {},
+          moneyFormat: "${{amount}}",
+          labels: defineLanguageDictionary("en-US"),
         },
         {
-          startsAt: new Date("March 17, 2021 14:30:00"),
-          endsAt: new Date("March 17, 2021 16:30:00"),
+          startsAt: new Date("March 17, 2021 13:00:00"),
+          endsAt: new Date("March 17, 2021 16:00:00"),
+          formattedTimeslot: formatTimeslot(new Date("March 17, 2021 13:00:00"), new Date("March 17, 2021 16:00:00"), "America/Los_Angeles"),
           remainingSpots: 4,
           minPrice: 150,
-          timezone: "Asia/Manila",
+          timezone: "America/Los_Angeles",
           onSelect: () => {},
+          moneyFormat: "${{amount}}",
+          labels: defineLanguageDictionary("en-US"),
         },
       ]}
+      lang={"en-US"}
     />
   </div>
 );

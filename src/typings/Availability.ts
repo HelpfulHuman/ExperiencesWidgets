@@ -9,4 +9,11 @@ export type Availability = {
   formattedTimeslot: FormattedTimeslot;
   totalUnits: number;
   unitsLeft: number;
+  occurrenceId?: string;
+  occurrenceTimeslots?: {
+    id: string;
+    startsAt: Date;
+    endsAt: Date;
+    formattedTimeslot: FormattedTimeslot;
+  }[];
 };
