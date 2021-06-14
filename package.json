@@ -48,7 +48,7 @@
     "@fullcalendar/list": "5.3.1",
     "@fullcalendar/moment-timezone": "5.3.1",
     "@fullcalendar/react": "5.3.1",
-    "@helpfulhuman/expapp-shared-libs": "2.8.4",
+    "@helpfulhuman/expapp-shared-libs": "2.8.6",
     "@helpfulhuman/oprm-sdk": "^1.0.5",
     "axios": "^0.21.1",
     "bugsnag": "2.4.3",

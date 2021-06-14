@@ -20,13 +20,15 @@ export type TimeslotCardProps = {
   onSelect: () => void;
   moneyFormat: string;
   labels: Partial<AppDictionary>;
-  occurrenceId?: string;
   occurrence?: {
     id: string;
-    startsAt: Date;
-    endsAt: Date;
-    formattedTimeslot: FormattedTimeslot;
-  }[];
+    timeslots: {
+      id: string;
+      startsAt: Date;
+      endsAt: Date;
+      formattedTimeslot: FormattedTimeslot;
+    }[];
+  }
 };
 
 export const TimeslotCard: FunctionComponent<TimeslotCardProps> = ({
@@ -36,7 +38,6 @@ export const TimeslotCard: FunctionComponent<TimeslotCardProps> = ({
   moneyFormat,
   onSelect,
   labels,
-  occurrenceId,
   occurrence,
 }) => {
   const [activeOccurrences, setActiveOccurrences] = useState<string[]>([]);
@@ -69,13 +70,13 @@ export const TimeslotCard: FunctionComponent<TimeslotCardProps> = ({
       : "spot left"
   }`;
 
-  const timeslotInfo = !!occurrence?.length
-    ? `${occurrence[0].formattedTimeslot.date} – ${occurrence[occurrence.length - 1].formattedTimeslot.date}`
+  const timeslotInfo = !!occurrence?.timeslots.length
+    ? `${occurrence.timeslots[0].formattedTimeslot.date} – ${occurrence.timeslots[occurrence.timeslots.length - 1].formattedTimeslot.date}`
     : formattedTimeslot.timeRange;
 
-  const occurrenceInfo = !!occurrence?.length && (
-    <ul className={`timeslot-card__occurrence${!!~activeOccurrences.indexOf(occurrenceId) ? " active" : ""}`}>
-      {occurrence.map((ts) =>
+  const occurrenceInfo = !!occurrence?.timeslots.length && (
+    <ul className={`timeslot-card__occurrence${!!~activeOccurrences.indexOf(occurrence.id) ? " active" : ""}`}>
+      {occurrence.timeslots.map((ts) =>
         <li key={ts.id} className="timeslot-card__occurrence__node">{ts.formattedTimeslot.date}, {ts.formattedTimeslot.timeRange}</li>)
       }
     </ul>
@@ -129,8 +130,8 @@ export const TimeslotCard: FunctionComponent<TimeslotCardProps> = ({
         </div>
         {!!occurrence && (
           <TimeslotOccurrenceToggle
-            active={!!~activeOccurrences.indexOf(occurrenceId)}
-            clickFunction={handleOccurrenceToggle.bind(null, occurrenceId)}
+            active={!!~activeOccurrences.indexOf(occurrence.id)}
+            clickFunction={handleOccurrenceToggle.bind(null, occurrence.id)}
           />
         )}
         {occurrenceInfo}

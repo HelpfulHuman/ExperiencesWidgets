@@ -1,3 +1,4 @@
+// tslint:disable:jsx-no-lambda
 /** @jsx h */
 import { h, FunctionComponent, Fragment } from "preact";
 import { useEffect, useState, useMemo } from "preact/hooks";
@@ -195,8 +196,7 @@ export const TimeslotSelection: FunctionComponent<TimeslotSelectionProps> = ({
                 startsAt: new Date(timeslot.startsAt),
                 endsAt: new Date(timeslot.endsAt),
                 formattedTimeslot: timeslot.formattedTimeslot,
-                occurrenceId: timeslot.occurrenceId,
-                occurrence: timeslot.occurrenceTimeslots,
+                occurrence: timeslot.occurrence,
                 remainingSpots: timeslot.unitsLeft,
                 timezone: timeslot.timezone,
                 onSelect: handleSelect,

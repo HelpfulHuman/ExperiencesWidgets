@@ -1,4 +1,5 @@
 import { FormattedTimeslot } from "./FormattedTimeslot";
+import { Occurrence } from "./Occurrence";
 
 export type Availability = {
   productId: string;
@@ -9,11 +10,5 @@ export type Availability = {
   formattedTimeslot: FormattedTimeslot;
   totalUnits: number;
   unitsLeft: number;
-  occurrenceId?: string;
-  occurrenceTimeslots?: {
-    id: string;
-    startsAt: Date;
-    endsAt: Date;
-    formattedTimeslot: FormattedTimeslot;
-  }[];
+  occurrence?: Occurrence;
 };
