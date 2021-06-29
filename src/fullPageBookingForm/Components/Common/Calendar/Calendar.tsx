@@ -136,7 +136,7 @@ export const Calendar: FunctionComponent<CalendarProps> = ({
         key={weekday}
         className="calendar__matrix__day calendar__matrix__day--header"
       >
-        <span>{weekday.charAt(0)}</span>
+        <span>{weekday.slice(0, 2)}</span>
       </div>
     ));
   };

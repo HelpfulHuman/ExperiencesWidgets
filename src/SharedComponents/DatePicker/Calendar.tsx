@@ -92,7 +92,7 @@ export class Calendar extends Component<CalendarProps> {
                         {this.headerTemplate.map(({ dayName, style }, i) => (
                             <div key={dayName} className="dayHeading" style={style} role="columnheader" aria-label={dayName}>
                                 {/* changing day name by slicing the first one letters */}
-                                <abbr>{dayName.slice(0, 1)}</abbr>
+                                <abbr>{dayName.slice(0, 2)}</abbr>
                             </div>
                         ))}
                     </div>
