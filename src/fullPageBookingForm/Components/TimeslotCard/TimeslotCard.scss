@@ -1,6 +1,7 @@
 .timeslot-card {
   display: flex;
   align-items: center;
+  flex-flow: row wrap;
 }
 
 .timeslot-card--is-disabled {
@@ -27,15 +28,50 @@
   }
 }
 
+.timeslot-card__occurrence-toggle {
+  display: flex;
+  align-items: center;
+  min-height: 1.5em;
+  border: none;
+  background: transparent;
+  margin-left: .5em;
+
+  &.active {
+    transform: rotateX(180deg);
+  }
+
+  path {
+    fill: #888;
+  }
+}
+
+.timeslot-card__occurrence {
+  display: none;
+  width: 100%;
+  margin: 0;
+  padding: 1rem 0 0 0;
+  opacity: .4;
+  list-style: none;
+
+  &.active {
+    display: block;
+  }
+}
+
+.timeslot-card__occurrence__node {
+  padding-top: .5rem;
+}
+
 @media (max-width: 490px) {
   .timeslot-card {
-    flex-direction: column;
+    flex-direction: row;
     align-items: stretch;
     justify-content: stretch;
   }
 
   .timeslot-card__button {
     margin-top: 15px;
+    order: 4;
   }
 
   .timeslot-card__button,

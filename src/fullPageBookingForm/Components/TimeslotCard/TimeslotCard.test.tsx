@@ -2,6 +2,8 @@
 import { h } from "preact";
 import { render, screen, fireEvent } from "@testing-library/preact";
 import { TimeslotCard } from "./TimeslotCard";
+import { defineLanguageDictionary } from "../../../typings/Languages";
+import { formatTimeslot } from "../../../typings/FormattedTimeslot";
 
 const defaultMoneyFormat = "${{amount}}";
 
@@ -10,11 +12,13 @@ test("Renders content correctly", async () => {
     <TimeslotCard
       startsAt={new Date("March 17, 2021 06:00:00")}
       endsAt={new Date("March 17, 2021 10:00:00")}
+      timezone="America/Los_Angeles"
+      formattedTimeslot={formatTimeslot(new Date("March 17, 2021 06:00:00"), new Date("March 17, 2021 10:00:00"), "America/Los_Angeles")}
       remainingSpots={4}
       minPrice={150}
-      timezone="America/Los_Angeles"
       onSelect={jest.fn()}
       moneyFormat={defaultMoneyFormat}
+      labels={defineLanguageDictionary("en-US")}
     />,
   );
 
@@ -31,11 +35,13 @@ test("Calls onSelect callback", () => {
     <TimeslotCard
       startsAt={new Date("March 17, 2021 06:00:00")}
       endsAt={new Date("March 17, 2021 10:00:00")}
+      timezone={"America/Los_Angeles"}
+      formattedTimeslot={formatTimeslot(new Date("March 17, 2021 06:00:00"), new Date("March 17, 2021 10:00:00"), "America/Los_Angeles")}
       remainingSpots={4}
       minPrice={150}
-      timezone={"Asia/Manila"}
       onSelect={handleSelect}
       moneyFormat={defaultMoneyFormat}
+      labels={defineLanguageDictionary("en-US")}
     />,
   );
 

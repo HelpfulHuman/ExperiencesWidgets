@@ -47,7 +47,8 @@
 }
 
 .timeslot-selection__timeslot-list {
-  width: 460px;
+  width: 50%;
+  max-width: 600px;
   flex: 1;
   position: absolute;
   right: 0;

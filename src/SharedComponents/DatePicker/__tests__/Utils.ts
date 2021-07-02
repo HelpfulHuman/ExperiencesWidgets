@@ -19,12 +19,12 @@ describe("Utils", () => {
     it("returns proper days when week starts on Monday", () => {
       const today = moment().toDate();
       const result = getMonthTemplate(today.getMonth(), today.getFullYear(), Weekdays.Monday);
-      expect(result[0].date.getDay()).toBe(Weekdays.Monday);
-      expect(result[6].date.getDay()).toBe(Weekdays.Sunday);
-      expect(result[7].date.getDay()).toBe(Weekdays.Monday);
-      expect(result[13].date.getDay()).toBe(Weekdays.Sunday);
-      expect(result[14].date.getDay()).toBe(Weekdays.Monday);
-      expect(result[20].date.getDay()).toBe(Weekdays.Sunday);
+      expect(result[0].date.getDay()).toBe(Weekdays.Sunday);
+      expect(result[6].date.getDay()).toBe(Weekdays.Saturday);
+      expect(result[7].date.getDay()).toBe(Weekdays.Sunday);
+      expect(result[13].date.getDay()).toBe(Weekdays.Saturday);
+      expect(result[14].date.getDay()).toBe(Weekdays.Sunday);
+      expect(result[20].date.getDay()).toBe(Weekdays.Saturday);
     });
   });
 });

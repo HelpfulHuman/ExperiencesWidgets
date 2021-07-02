@@ -2,39 +2,48 @@
 import { h } from "preact";
 import { render, screen } from "@testing-library/preact";
 import { TimeslotGroup } from "./TimeslotGroup";
+import { formatTimeslot } from "../../../typings/FormattedTimeslot";
+import { defineLanguageDictionary } from "../../../typings/Languages";
 
 test("Renders content correctly", () => {
   render(
     <TimeslotGroup
       timeslots={[
         {
-          moneyFormat: "$",
-          startsAt: new Date("March 17, 2021 06:00:00"),
-          endsAt: new Date("March 17, 2021 10:00:00"),
+          startsAt: new Date(Date.UTC(2021, 2, 17, 10)),
+          endsAt: new Date(Date.UTC(2021, 2, 17, 11)),
+          formattedTimeslot: formatTimeslot(new Date(Date.UTC(2021, 2, 17, 10)), new Date(Date.UTC(2021, 2, 17, 11)), "America/Los_Angeles"),
           remainingSpots: 4,
           minPrice: 150,
-          timezone: "Asia/Manila",
+          timezone: "America/Los_Angeles",
           onSelect: jest.fn(),
+          moneyFormat: "${{amount}}",
+          labels: defineLanguageDictionary("en-US"),
         },
         {
-          moneyFormat: "$",
-          startsAt: new Date("March 17, 2021 11:30:00"),
-          endsAt: new Date("March 17, 2021 12:00:00"),
+          startsAt: new Date(Date.UTC(2021, 2, 17, 11)),
+          endsAt: new Date(Date.UTC(2021, 2, 17, 12)),
+          formattedTimeslot: formatTimeslot(new Date(Date.UTC(2021, 2, 17, 11)), new Date(Date.UTC(2021, 2, 17, 12)), "America/Los_Angeles"),
           remainingSpots: 4,
           minPrice: 150,
-          timezone: "Asia/Manila",
+          timezone: "America/Los_Angeles",
           onSelect: jest.fn(),
+          moneyFormat: "${{amount}}",
+          labels: defineLanguageDictionary("en-US"),
         },
         {
-          moneyFormat: "$",
-          startsAt: new Date("March 17, 2021 14:30:00"),
-          endsAt: new Date("March 17, 2021 16:30:00"),
+          startsAt: new Date(Date.UTC(2021, 2, 17, 12)),
+          endsAt: new Date(Date.UTC(2021, 2, 17, 13)),
+          formattedTimeslot: formatTimeslot(new Date(Date.UTC(2021, 2, 17, 12)), new Date(Date.UTC(2021, 2, 17, 13)), "America/Los_Angeles"),
           remainingSpots: 4,
           minPrice: 150,
-          timezone: "Asia/Manila",
+          timezone: "America/Los_Angeles",
           onSelect: jest.fn(),
+          moneyFormat: "${{amount}}",
+          labels: defineLanguageDictionary("en-US"),
         },
       ]}
+      lang={"en-US"}
     />,
   );
 
